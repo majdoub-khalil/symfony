@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <!-- Add links to your CSS stylesheets or include Bootstrap styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Add any additional styling for your dark theme -->
+    <style>
+        body {
+            background-color: #343a40; /* Dark background color */
+            color: #ffffff; /* Light text color */
+        }
+
+        .table {
+            color: #ffffff; /* Light text color for the table */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div align="center">
+            <h2>User List</h2>
+
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prenom</th>
+                        <th>Email</th>
+                        <th>Genre</th>
+                        <th>Date de Naissance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.nom }}</td>
+                            <td>{{ user.prenom }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.genre }}</td>
+                            <td>{{ user.dateNaissance|date('Y-m-d') }}</td>
+                            <td>
+                                <a href="{{ path('personne_edit', {'id': user.id}) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ path('personne_delete', {'id': user.id}) }}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add links to your JS scripts or include Bootstrap scripts if needed -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
