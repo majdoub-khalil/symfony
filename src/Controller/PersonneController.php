@@ -65,7 +65,7 @@ class PersonneController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('show_admin');
         }
-        return $this->renderForm('personne/addPersonne.html.twig', [
+        return $this->renderForm('personne/adminedit.html.twig', [
             'personne' => $personne,
             'form' => $form,
         ]);

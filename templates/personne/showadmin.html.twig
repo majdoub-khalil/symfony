@@ -47,8 +47,8 @@
                             <td>{{ user.genre }}</td>
                             <td>{{ user.dateNaissance|date('Y-m-d') }}</td>
                             <td>
-                                <a href="{{ path('personne_edit', {'id': user.id}) }}" class="btn btn-warning">Edit</a>
-                                <a href="{{ path('personne_delete', {'id': user.id}) }}" class="btn btn-danger">Delete</a>
+                                <a href="{{ path('personne_edit', {'id': user.id}) }}" class="btn btn-warning"onclick="return confirm('do you really want to change this account?')">Edit</a>
+                                <a href="{{ path('personne_delete', {'id': user.id}) }}" class="btn btn-danger"onclick="return confirm('do you really want to delete this account?')">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}
