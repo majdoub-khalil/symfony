@@ -1,0 +1,90 @@
+
+
+
+{% block body %}
+<html lang="en">
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #ff8c00; /* Orange color */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e07b00; /* Darker shade of orange on hover */
+        }
+
+        .alert {
+            margin-top: 15px;
+            background-color: #d9534f; /* Bootstrap's alert-danger color */
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+
+    <div class="container">
+        <form method="post" action="{{ path('app_sig') }}">
+            <h2>Login</h2>
+
+            {% if error is not null %}
+                <div class="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required />
+
+            <label for="password">password</label>
+            <input type="password" id="password" name="password" required />
+
+            <button type="submit">Login</button>
+<a href="{{ path('email_verification') }}">
+    <button type="button" style="width: 300px;">Mot de passe oublié</button>
+</a>
+
+        </form>
+    </div>
+{% endblock %}

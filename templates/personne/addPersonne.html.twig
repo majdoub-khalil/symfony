@@ -10,7 +10,8 @@
     <!-- Add any additional styling for your fitness interface -->
     <style>
         body {
-            background-color: #f8f9fa; /* Light gray background */
+            background-color: #001f3f; /* Dark blue background */
+            color: #ffffff; /* White text color */
         }
 
         .signup-container {
@@ -20,7 +21,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff; /* White background */
+            background-color: #00263e; /* Darker blue background */
         }
 
         .form-group {
@@ -29,6 +30,17 @@
 
         .signup-title {
             margin-bottom: 30px;
+        }
+
+        .countdown {
+            font-size: 20px;
+            color: red;
+        }
+
+        /* Updated to orange button */
+        .btn-primary {
+            background-color: #ff8c00 !important; /* Orange color */
+            border-color: #ff8c00 !important;
         }
     </style>
 </head>
@@ -41,8 +53,10 @@
             {{ form_start(form) }}
 
             <div class="form-group">
-                {{ form_row(form.nom, { 'attr': {'class': 'form-control', 'placeholder': 'Nom'} }) }}
+                {{ form_row(form.nom, { 
+                    'attr': {'class': 'form-control', 'placeholder': 'Nom'}  }) }}
             </div>
+
             <div class="form-group">
                 {{ form_row(form.prenom, { 'attr': {'class': 'form-control', 'placeholder': 'Prénom'} }) }}
             </div>
@@ -62,9 +76,14 @@
                 {{ form_row(form.motDePasse2, { 'attr': {'class': 'form-control', 'placeholder': 'Confirmer le Mot de Passe'} }) }}
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block"onclick="return confirm('welcome To Fitnatic')">Sign up</button>
+            <button type="submit" class="btn btn-primary btn-block">Sign up</button>
 
             {{ form_end(form) }}
+            {% for flashError in app.flashes('error') %}
+                <div class="alert alert-danger" role="alert" style="margin-top: 30px; width: 600px; margin-left: auto; margin-right: auto;">
+                    {{ flashError }}
+                </div>
+            {% endfor %}
         </div>
     </div>
 

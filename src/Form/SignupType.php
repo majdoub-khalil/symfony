@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
+
 
 class SingupType extends AbstractType
 {
@@ -39,10 +41,20 @@ class SingupType extends AbstractType
             ])
             ->add('motDePasse', PasswordType::class, [
                 'label' => 'Mot de Passe',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%^&*]{8,}$/',
+                        'message' => 'Le mot de passe doit contenir au moins 8 caractères, dont au moins un chiffre et une lettre.',
+                    ]),
+                ],
             ])
             ->add('motDePasse2', PasswordType::class, [
                 'label' => 'Confirmer le Mot de Passe',
             ])
+            ;
+            
+            
+           
             #->add('Sign_Up', SubmitType::class, [
                 #'label' => 'Sign Up',
             ;

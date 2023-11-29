@@ -1,0 +1,75 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code de vérification</title>
+    <!-- Add links to your CSS stylesheets or include Bootstrap styles -->
+    <link rel="stylesheet" href="path/to/your/styles.css">
+    <style>
+        body {
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .emailverif-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            background-color: #333; /* Dark gray background */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #4CAF50; /* Green button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="emailverif-container">
+        <h2>Code de vérification</h2>
+        
+
+        {# Assuming your form has an 'Email' field and a 'Send' button #}
+         {{ form_start(form1, { 'method': 'post' }) }}
+            <div class="form-group">
+                {{ form_row(form1.Code, { 'attr': {'placeholder': 'Enter your code'} }) }}
+            </div>
+            
+        {{ form_end(form1) }}
+    </div>
+    {% for flashType, flashMessages in app.flashes %}
+    {% for flashMessage in flashMessages %}
+        <div class="alert alert-{{ flashType }}">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+{% endfor %}
+</body>
+
+</html>

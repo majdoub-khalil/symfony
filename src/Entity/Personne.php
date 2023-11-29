@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\PersonneRepository;
 use Doctrine\DBAL\Types\Types;
@@ -8,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
-class Personne  implements  UserInterface
+class Personne implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,24 +17,37 @@ class Personne  implements  UserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Nom cannot be blank.')]
+    #[Assert\Regex(pattern: "/^[a-zA-Z]+$/", message: 'Invalid characters in Nom.')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Prenom cannot be blank.')]
+    #[Assert\Regex(pattern: "/^[a-zA-Z]+$/", message: 'Invalid characters in Prenom.')]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Email cannot be blank.')]
+    #[Assert\Email(message: 'Invalid email format.')]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $genre = null;
 
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: 'Date de Naissance cannot be blank.')]
+    #[Assert\LessThan('today', message: 'Invalid date of birth.')]
     private ?\DateTimeInterface $dateNaissance = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Mot de Passe cannot be blank.')]
+    #[Assert\Length(min: 6, minMessage: 'Mot de Passe must be at least {{ limit }} characters long.')]
     private ?string $motDePasse = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Mot de Passe2 cannot be blank.')]
+    #[Assert\EqualTo(propertyPath: 'motDePasse', message: 'Mot de Passe2 must be equal to Mot de Passe.')]
     private ?string $motDePasse2 = null;
 
     public function getId(): ?int
@@ -124,6 +138,7 @@ class Personne  implements  UserInterface
 
         return $this;
     }
+
     public function getUserIdentifier(): string
     {
         return $this->email; // Replace with the actual field used as the username
@@ -149,9 +164,9 @@ class Personne  implements  UserInterface
     {
         // You can leave this method blank unless you're storing sensitive information.
     }
-    public function getUsername(): string
-{
-    return $this->email; // Replace with the actual field used as the username
-}
 
+    public function getUsername(): string
+    {
+        return $this->email; // Replace with the actual field used as the username
+    }
 }
