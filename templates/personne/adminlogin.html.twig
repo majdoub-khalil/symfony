@@ -1,0 +1,33 @@
+{% block body %}
+    <div style="background-color: #0a3d62; height: 100vh; display: flex; justify-content: center; align-items: center;">
+        <div style="background-color: transparent; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); text-align: center; color: #fff;">
+            <h1 style="color: #fff; font-weight: bold;">Admin Login</h1>
+
+            {% if app.session.flashBag.has('error') %}
+                <div style="margin-bottom: 10px; color: red;">
+                    {{ app.session.flashBag.get('error')|first }}
+                </div>
+            {% endif %}
+
+            {{ form_start(form) }}
+
+            <div style="margin-bottom: 10px; display: flex; flex-direction: column; align-items: center;">
+                <div style="margin-bottom: 10px;">
+                    {{ form_label(form.email, 'Email', {'label_attr': {'style': 'font-weight: bold; color: #fff;'}}) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'style': 'color: #000;'}}) }}
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    {{ form_label(form.motDePasse, 'Mot de Passe', {'label_attr': {'style': 'font-weight: bold; color: #fff;'}}) }}
+                    {{ form_widget(form.motDePasse, {'attr': {'class': 'form-control', 'style': 'color: #000;'}}) }}
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                {{ form_row(form.Sign_IN, {'label': 'Sign In', 'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

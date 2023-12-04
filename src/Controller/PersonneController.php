@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Personne;
+use App\Form\AdminloginType;
 use App\Form\CodeverifType;
 use App\Form\SigninType;
 use App\Form\SingupType;
@@ -18,6 +19,8 @@ use App\Form\EmailverifType;
 use App\Form\ModifpassType;
 use App\Service\MailService;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -42,32 +45,33 @@ class PersonneController extends AbstractController
     }
 
     #[Route('/log', name: 'app_sig')]
-    public function customLogin(Request $request): Response
+    public function customLogin(Request $request,SessionInterface $Session): Response
     {
         $error = null;
 
-        // Check if the form is submitted
+     
         if ($request->isMethod('POST')) {
-            // Retrieve email and password from the form
+          
             $email = $request->request->get('email');
             $password = $request->request->get('password');
 
-            // Retrieve the user from the database based on the entered email
+            
             $userRepository = $this->getDoctrine()->getRepository(Personne::class);
             $user = $userRepository->findOneBy(['email' => $email]);
 
-            // Check if the user exists and the password is correct
+            
             if ($user && password_verify($password, $user->getMotDePasse())) {
-                // Redirect to a success page or perform any other action
+                $Session->set('user',$user);
+                
                 return $this->redirectToRoute('app_homepage');
             } else {
-                // Invalid credentials, you might want to add an error message
+               
                 $error = 'Invalid email or password';
             }
         }
 
         return $this->render('Personne/login.html.twig', ['error' => $error]);
-    }
+    } 
 
     #[Route('/{_locale}/addPersonne', name: 'add_Personne')]
     public function addPersonne(EntityManagerInterface $entityManager, Request $request): Response
@@ -86,7 +90,7 @@ class PersonneController extends AbstractController
                 
             }
             
-            // Hash the password before saving it to the database
+            
             $hashedPassword = password_hash($personne->getMotDePasse(), PASSWORD_BCRYPT);
             $personne->setMotDePasse($hashedPassword);
             $hashedPassword = password_hash($personne->getMotDePasse2(), PASSWORD_BCRYPT);
@@ -96,7 +100,7 @@ class PersonneController extends AbstractController
             $entityManager->persist($personne);
             $entityManager->flush();
 
-            // Redirect to a success page or another route
+            
             return $this->redirectToRoute('app_homepage');
         }
 
@@ -123,7 +127,7 @@ class PersonneController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hash the password before saving it to the database
+            
             $hashedPassword = password_hash($personne->getMotDePasse(), PASSWORD_BCRYPT);
             $personne->setMotDePasse($hashedPassword);
             $hashedPassword = password_hash($personne->getMotDePasse2(), PASSWORD_BCRYPT);
@@ -157,7 +161,7 @@ class PersonneController extends AbstractController
     }
     private function containsBadWords($nom, $badWords)
     {
-        $nom = strtolower($nom); // Convert to lowercase for case-insensitive check
+        $nom = strtolower($nom); 
 
         foreach ($badWords as $badWord) {
             if (strpos($nom, strtolower($badWord)) !== false) {
@@ -188,7 +192,7 @@ public function emailVerification(Request $request,PersonneRepository $repo,Mail
 
         $this->addFlash('success', 'Verification email sent successfully.');
 
-        // Redirect to a success page or another route
+       
         return $this->redirectToRoute('code_verification', ['userId' => $id, 'verificationCode' => $code]);
         
     }
@@ -214,12 +218,10 @@ public function codeverif(Request $request, int $userId, string $verificationCod
             $this->addFlash('Verify the code sent to your email', 'Code Incorrect.');
         }
         
-        // Handle form submission if needed
-        // For example, you can check the submitted code and perform verification
-
+        
      
 
-        // Return the verification code in the response
+        
        
     }
 
@@ -241,9 +243,7 @@ public function codemodif(Request $request, int $userId,ManagerRegistry $manager
     $personne = $repo->find($userId);
     $nom=$personne->getNom();
     if ($form1->isSubmitted()) {
-        // Handle form submission if needed
-        // For example, you can check the submitted data and update the password
-         // Hash the password before saving it to the database
+        
          $hashedPassword = password_hash($personne->getMotDePasse(), PASSWORD_BCRYPT);
          $personne->setMotDePasse($hashedPassword);
          $hashedPassword = password_hash($personne->getMotDePasse2(), PASSWORD_BCRYPT);
@@ -251,7 +251,7 @@ public function codemodif(Request $request, int $userId,ManagerRegistry $manager
          $em->flush();
         $this->addFlash('success', 'Success.');
 
-        // Redirect to a success page or another route
+       
         return $this->redirectToRoute('app_homepage');
     }
 
@@ -263,7 +263,37 @@ public function codemodif(Request $request, int $userId,ManagerRegistry $manager
     ]);
     
 }
+#[Route('/log2', name: 'admin_login')]
+public function adminLogin(Request $request): Response
+{
+    // Create an instance of your form
+    $form = $this->createForm(AdminloginType::class);
 
+    // Handle the form submission
+    $form->handleRequest($request);
+
+    // Check if the form is submitted and valid
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Get the submitted data
+        $formData = $form->getData();
+
+        // Check if email and password match the expected values
+        if ($formData['email'] === 'admin1@email.com' && $formData['motDePasse'] === 'admin123') {
+            // Redirect to the desired route (replace 'desired_route' with your actual route)
+            return $this->redirectToRoute('show_admin');
+        } else {
+            // Invalid credentials, add an error flash message
+            $this->addFlash('error', 'Invalid email or password');
+        }
+    }
+
+    // Render the admin login form with possible error message
+    return $this->render('personne/adminlogin.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 
 
 }
+
+
